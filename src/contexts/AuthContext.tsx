@@ -9,13 +9,15 @@ import {
 type AuthContextType = {
   isAuthenticated: boolean;
   isLoading: boolean;
-  login: (token: string) => void;
+  login: (token: string, user: string) => void;
   logout: () => void;
+  user: string | null;
 };
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
+  const user = localStorage.getItem("user");
   const [isLoading, setIsLoading] = useState(true);
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
 
@@ -25,8 +27,9 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     setIsLoading(false);
   }, []);
 
-  const login = (token: string) => {
+  const login = (token: string, user: string) => {
     localStorage.setItem("token", token);
+    localStorage.setItem("user", user);
     setIsAuthenticated(true);
   };
 
@@ -36,7 +39,9 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   };
 
   return (
-    <AuthContext.Provider value={{ isAuthenticated, isLoading, login, logout }}>
+    <AuthContext.Provider
+      value={{ isAuthenticated, isLoading, login, logout, user }}
+    >
       {children}
     </AuthContext.Provider>
   );

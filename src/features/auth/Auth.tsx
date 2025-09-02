@@ -23,7 +23,7 @@ const Auth = () => {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     const mockToken = "mock-jwt-token" + "-" + (Math.random() * 100).toFixed();
-    login(mockToken);
+    login(mockToken, email);
     navigate("/");
   };
 
