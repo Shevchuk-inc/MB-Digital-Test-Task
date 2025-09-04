@@ -53,7 +53,23 @@ export const Cart = () => {
     .toFixed(2);
 
   return (
-    <Dialog open={isOpen} onClose={handleClose} maxWidth="sm" fullWidth>
+    <Dialog
+      open={isOpen}
+      onClose={handleClose}
+      maxWidth="sm"
+      fullWidth
+      fullScreen={window.innerWidth < 600}
+      PaperProps={{
+        sx: {
+          m: 0,
+          maxHeight: "100vh",
+          "@media (min-width: 600px)": {
+            m: 2,
+            maxHeight: "90vh",
+          },
+        },
+      }}
+    >
       <DialogTitle>
         <Box display="flex" justifyContent="space-between" alignItems="center">
           <Typography variant="h6">
@@ -65,7 +81,14 @@ export const Cart = () => {
         </Box>
       </DialogTitle>
       <Divider />
-      <DialogContent>
+      <DialogContent
+        sx={{
+          p: { xs: 1, sm: 2 },
+          "&.MuiDialogContent-root": {
+            padding: { xs: "8px", sm: "16px" },
+          },
+        }}
+      >
         {items.length === 0 ? (
           <Box textAlign="center" py={4}>
             <Typography variant="subtitle1">Your cart is empty</Typography>
@@ -79,38 +102,75 @@ export const Cart = () => {
               {items.map((item) => (
                 <ListItem
                   key={item.id}
+                  sx={{
+                    p: { xs: 1, sm: 2 },
+                    alignItems: "flex-start",
+                  }}
                   secondaryAction={
                     <IconButton
                       edge="end"
                       color="error"
+                      size="small"
+                      sx={{
+                        top: { xs: -4, lg: -4 },
+                        right: { xs: -2, lg: -4 },
+                        position: "absolute",
+                      }}
                       onClick={() => handleRemoveItem(item.id)}
                     >
                       <Delete />
                     </IconButton>
                   }
                 >
-                  <ListItemAvatar>
+                  <ListItemAvatar
+                    sx={{ minWidth: { xs: 56, sm: 64 }, mt: 0.5 }}
+                  >
                     <Box
                       component="img"
                       alt={item.title}
                       sx={{
-                        width: 64,
-                        height: 48,
                         borderRadius: 1,
                         objectFit: "cover",
+                        width: { xs: 48, sm: 64 },
+                        height: { xs: 36, sm: 48 },
                       }}
                       src={item.thumbnailUrl}
                     />
                   </ListItemAvatar>
-                  <Box sx={{ ml: 2, flex: 1 }}>
-                    <Typography variant="subtitle2" noWrap>
+                  <Box
+                    sx={{
+                      pr: 4,
+                      flex: 1,
+                      overflow: "hidden",
+                      ml: { xs: 1, sm: 2 },
+                    }}
+                  >
+                    <Typography
+                      variant="subtitle2"
+                      noWrap
+                      sx={{
+                        mb: 0.5,
+                        lineHeight: 1.2,
+                        fontSize: { xs: "0.875rem", sm: "1rem" },
+                      }}
+                    >
                       {item.title}
                     </Typography>
-                    <Box display="flex" alignItems="center" mt={1}>
+                    <Box
+                      mt={1}
+                      gap={1}
+                      display="flex"
+                      flexWrap="wrap"
+                      alignItems="center"
+                    >
                       <Typography
                         variant="body2"
                         color="text.secondary"
-                        sx={{ mr: 2 }}
+                        sx={{
+                          mr: 1,
+                          minWidth: "40px",
+                          fontSize: { xs: "0.75rem", sm: "0.875rem" },
+                        }}
                       >
                         $9.99
                       </Typography>
@@ -126,11 +186,38 @@ export const Cart = () => {
                         }
                         inputProps={{
                           min: 1,
-                          style: { width: "60px", textAlign: "center" },
+                          style: {
+                            margin: 0,
+                            width: "50px",
+                            padding: "8px 4px",
+                            textAlign: "center",
+                            WebkitAppearance: "none",
+                          },
                         }}
-                        sx={{ mr: 2 }}
+                        sx={{
+                          mr: 1,
+                          "& .MuiOutlinedInput-root": {
+                            maxHeight: "32px",
+                          },
+                          "& input[type=number]": {
+                            "&::-webkit-inner-spin-button, &::-webkit-outer-spin-button":
+                              {
+                                WebkitAppearance: "none",
+                                margin: 0,
+                              },
+                            MozAppearance: "textfield",
+                          },
+                        }}
                       />
-                      <Typography variant="subtitle1">
+                      <Typography
+                        variant="subtitle1"
+                        sx={{
+                          ml: "auto",
+                          fontWeight: 500,
+                          whiteSpace: "nowrap",
+                          fontSize: { xs: "0.875rem", sm: "1rem" },
+                        }}
+                      >
                         ${(item.quantity * 9.99).toFixed(2)}
                       </Typography>
                     </Box>
@@ -143,20 +230,43 @@ export const Cart = () => {
               mb={2}
               display="flex"
               alignItems="center"
+              px={{ xs: 1, sm: 0 }}
               justifyContent="space-between"
             >
-              <Typography variant="h6">Total:</Typography>
-              <Typography variant="h6">${totalPrice}</Typography>
+              <Typography
+                variant="h6"
+                sx={{ fontSize: { xs: "1.1rem", sm: "1.25rem" } }}
+              >
+                Total:
+              </Typography>
+              <Typography
+                variant="h6"
+                sx={{ fontSize: { xs: "1.1rem", sm: "1.25rem" } }}
+              >
+                ${totalPrice}
+              </Typography>
             </Box>
-            <Button
-              fullWidth
-              size="large"
-              color="primary"
-              variant="contained"
-              onClick={handleCheckout}
-            >
-              Proceed to Checkout
-            </Button>
+            <Box px={{ xs: 1, sm: 0 }}>
+              <Button
+                fullWidth
+                size="large"
+                color="primary"
+                variant="contained"
+                onClick={handleCheckout}
+                sx={{
+                  py: 1.5,
+                  fontWeight: 500,
+                  boxShadow: "none",
+                  "&:hover": {
+                    boxShadow: "none",
+                    textTransform: "none",
+                    fontSize: { xs: "0.9rem", sm: "1rem" },
+                  },
+                }}
+              >
+                Proceed to Checkout
+              </Button>
+            </Box>
           </>
         )}
       </DialogContent>
