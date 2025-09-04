@@ -4,17 +4,29 @@ import {
   Divider,
   IconButton,
   ListItemIcon,
+  Menu,
   MenuItem,
   Tooltip,
   Typography,
-  Menu,
+  Badge,
 } from "@mui/material";
-import { Logout } from "@mui/icons-material";
-import { useState } from "react";
+import { Logout, ShoppingCart } from "@mui/icons-material";
 import { useAuth } from "../../contexts/AuthContext.tsx";
+import { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { selectCartTotal, toggleCart } from "../../store/slices/cartSlice";
+import { Cart } from "../../features/cart";
 
 const Header = () => {
+  const { logout, user } = useAuth();
+  const userName = user?.split("")[0];
+  const dispatch = useDispatch();
+  const cartItemCount = useSelector(selectCartTotal);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+
+  const handleCartClick = () => {
+    dispatch(toggleCart());
+  };
   const open = Boolean(anchorEl);
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
@@ -22,9 +34,6 @@ const Header = () => {
   const handleClose = () => {
     setAnchorEl(null);
   };
-
-  const { logout, user } = useAuth();
-  const userName = user?.split("")[0];
 
   return (
     <>
@@ -39,18 +48,34 @@ const Header = () => {
         }}
       >
         <Typography variant="h6">MB Digital Courses</Typography>
-        <Tooltip title="Account">
-          <IconButton
-            onClick={handleClick}
-            size="small"
-            sx={{ ml: 2 }}
-            aria-controls={open ? "account-menu" : undefined}
-            aria-haspopup="true"
-            aria-expanded={open ? "true" : undefined}
-          >
-            <Avatar sx={{ width: 32, height: 32 }}>{userName}</Avatar>
-          </IconButton>
-        </Tooltip>
+        <Box display="flex" alignItems="center">
+          <Tooltip title="Shopping Cart">
+            <IconButton
+              size="large"
+              sx={{ mr: 1 }}
+              color="inherit"
+              onClick={handleCartClick}
+              aria-label={`${cartItemCount} items in cart`}
+            >
+              <Badge badgeContent={cartItemCount} color="error">
+                <ShoppingCart />
+              </Badge>
+            </IconButton>
+          </Tooltip>
+
+          <Tooltip title="Account">
+            <IconButton
+              onClick={handleClick}
+              size="small"
+              sx={{ ml: 2 }}
+              aria-controls={open ? "account-menu" : undefined}
+              aria-haspopup="true"
+              aria-expanded={open ? "true" : undefined}
+            >
+              <Avatar sx={{ width: 32, height: 32 }}>{userName}</Avatar>
+            </IconButton>
+          </Tooltip>
+        </Box>
       </Box>
 
       <Menu
@@ -101,6 +126,7 @@ const Header = () => {
           Logout
         </MenuItem>
       </Menu>
+      <Cart />
     </>
   );
 };

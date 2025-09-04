@@ -10,9 +10,12 @@ import {
 import type { Course } from "../../types/coursesTypes.ts";
 import { VideoModal } from "../videoModal";
 import { useState } from "react";
+import { useDispatch } from "react-redux";
+import { addToCart } from "../../store/slices/cartSlice";
 
 const CourseCard = ({ course }: { course: Course }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const dispatch = useDispatch();
   const handleOpenModal = () => {
     setIsModalOpen(true);
   };
@@ -20,6 +23,11 @@ const CourseCard = ({ course }: { course: Course }) => {
   const handleCloseModal = () => {
     setIsModalOpen(false);
   };
+
+  const handleBuyClick = () => {
+    dispatch(addToCart(course));
+  };
+
   return (
     <>
       <Card sx={{ maxWidth: 345, m: 1 }}>
@@ -81,8 +89,13 @@ const CourseCard = ({ course }: { course: Course }) => {
             </Typography>
           </Box>
 
-          <Button variant="outlined" sx={{ mt: 2 }}>
-            Buy
+          <Button
+            color="primary"
+            variant="contained"
+            sx={{ mt: 2, width: "100%" }}
+            onClick={handleBuyClick}
+          >
+            Add to Cart
           </Button>
         </CardContent>
       </Card>
