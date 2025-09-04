@@ -61,7 +61,7 @@ const Auth = () => {
             fullWidth
             type="password"
             value={password}
-            placeholder="Email"
+            placeholder="password"
             onChange={(e) => setPassword(e.target.value)}
           />
           <FormControlLabel

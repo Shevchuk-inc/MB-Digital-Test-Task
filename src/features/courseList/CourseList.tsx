@@ -1,4 +1,4 @@
-import { Box, CircularProgress, Typography } from "@mui/material";
+import { Box, CircularProgress, Container, Typography } from "@mui/material";
 import type { Course } from "../../types/coursesTypes.ts";
 import { CourseCard } from "../courseCard/CourseCard.tsx";
 
@@ -34,16 +34,18 @@ const CourseList = ({ courses, loading, error }: CourseListProps) => {
   }
 
   return (
-    <Box
-      p={2}
-      gap={3}
-      display="grid"
-      gridTemplateColumns="repeat(auto-fill, minmax(300px, 1fr))"
-    >
-      {courses.map((course) => (
-        <CourseCard key={course.id} course={course} />
-      ))}
-    </Box>
+    <Container maxWidth="lg">
+      <Box
+        p={2}
+        gap={3}
+        display="grid"
+        gridTemplateColumns="repeat(auto-fill, minmax(300px, 1fr))"
+      >
+        {courses.map((course) => (
+          <CourseCard key={course.id} course={course} />
+        ))}
+      </Box>
+    </Container>
   );
 };
 
