@@ -4,6 +4,7 @@ import {
   createSlice,
   type PayloadAction,
 } from "@reduxjs/toolkit";
+import { API_URL } from "../../constants/api.ts";
 
 const initialState: CoursesState = {
   items: [],
@@ -14,9 +15,7 @@ const initialState: CoursesState = {
 export const fetchCourses = createAsyncThunk(
   "videos/fetchCourses",
   async () => {
-    const response = await fetch(
-      "https://gist.githubusercontent.com/poudyalanil/ca84582cbeb4fc123a13290a586da925/raw/14a27bd0bcd0cd323b35ad79cf3b493dddf6216b/videos.json",
-    );
+    const response = await fetch(API_URL);
     if (!response.ok) {
       throw new Error("Failed to fetch videos");
     }
